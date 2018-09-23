@@ -42,6 +42,12 @@ it('renders increment button', () => {
   expect(button).toHaveLength(1)
 });
 
+it('renders the decrement button', () => {
+  const wrapper = setup()
+  const button = findByTestAttr(wrapper, 'decrement-button')
+  expect(button).toHaveLength(1)
+})
+
 it('renders counter display', () => {
   const wrapper = setup()
   const counterDisplay = findByTestAttr(wrapper, 'counter-display')
@@ -67,4 +73,50 @@ it('clicking button increments counter display', () => {
   // Find display and test value
   const counterDisplay = findByTestAttr(wrapper, 'counter-display')
   expect(counterDisplay.text()).toContain(counter + 1);
+});
+
+it('clicking button decrement counter display', () => {
+  const counter = 7;
+  const wrapper = setup(null, { counter })
+
+  // Find button and click
+  const button = findByTestAttr(wrapper, 'decrement-button')
+  button.simulate('click')
+  wrapper.update()
+  expect(wrapper.state('counter')).toBe(6);
+
+  // Find display and test value
+  const counterDisplay = findByTestAttr(wrapper, 'counter-display')
+  expect(counterDisplay.text()).toContain(counter - 1);
+});
+
+it('clicking button decrement after zero will display an error', () => {
+  const counter = 0;
+  const wrapper = setup(null, { counter })
+
+  // Find button and click
+  const button = findByTestAttr(wrapper, 'decrement-button')
+  button.simulate('click')
+  wrapper.update()
+  expect(wrapper.state('displayBelowZeroMessage')).toBeTruthy();
+
+  // Find display and test value
+  const belowZeroMessage = findByTestAttr(wrapper, 'below-zero-message')
+  expect(belowZeroMessage).toHaveLength(1)
+});
+
+it('clicking button increment will clear the below zero display', () => {
+  const counter = 0;
+  const displayBelowZeroMessage = true
+  const wrapper = setup(null, { counter, displayBelowZeroMessage })
+
+  // Find button and click
+  const button = findByTestAttr(wrapper, 'increment-button')
+  button.simulate('click')
+  wrapper.update()
+  expect(wrapper.state('displayBelowZeroMessage')).toBeFalsy();
+
+  // Find display and test value
+  const belowZeroMessage = findByTestAttr(wrapper, 'below-zero-message')
+  expect(belowZeroMessage).toHaveLength(0)
 });
