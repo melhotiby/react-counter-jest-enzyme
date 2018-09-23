@@ -1,4 +1,5 @@
-# React Counter Increment/Decrement tested with Jest and Enzyme
+# React Counter
+Increment/Decrement counter tested with Jest and Enzyme
 
 ## Getting Started
 
